@@ -5,8 +5,9 @@
 LoraSx1262 radio;
 int temperature = 20;
 int humidity = 45;
+//const byte control = 48;
 
-// #define RX
+//#define RX
 #ifndef RX
 #define TX
 #endif
@@ -28,8 +29,7 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
 byte receiveBuff[RADIO_BUFF_SIZE];
 
 int counter = 0;
-int temperature = 20;
-int humidity = 45;
+
 void showText();
 
 void setup()
@@ -75,6 +75,30 @@ void loop()
     // Print the payload out over serial
     Serial.print("Received: ");
     // Serial.write(receiveBuff, bytesRead);
+    // byte r_c = receiveBuff[0];
+    // if (r_c != control)
+    // {
+    //   short shift_count = 0;
+    //   while (r_c != control)
+    //   {
+    //     r_c = (r_c >> 1);
+    //     shift_count++;
+    //     if (shift_count >= 4)
+    //       break;
+    //   }
+    //   if (shift_count!=0 && shift_count < 4)
+    //   {
+    //     receiveBuff[3] = 0;
+    //     uint32_t tmp = *(uint32_t*)receiveBuff;
+    //     tmp = tmp >> shift_count;
+    //     memcpy(receiveBuff, &tmp,4);
+    //   }
+    //   else {
+        
+    //   }
+    // }
+    //Serial.print(receiveBuff[0]);
+    //Serial.print(" ");
     temperature = receiveBuff[0];
     Serial.print(temperature); // Add a newline after printing
     Serial.print(" ");
@@ -84,7 +108,7 @@ void loop()
     counter++;
     showText();
   }
-  delay(1000);
+  delay(100);
 }
 
 void showText()
@@ -120,7 +144,6 @@ void showText()
 
 DHT dht;
 byte payload[PAYLOAD_SIZE];
-
 
 void setup()
 {
@@ -166,6 +189,7 @@ void loop()
   // }
   // temperature = (int)event.temperature;
   // humidity = (int)event.relative_humidity;
+  //payload[0] = control;
   payload[0] = temperature;
   payload[1] = humidity;
   Serial.print("Transmitting... ");
@@ -178,5 +202,3 @@ void loop()
   delay(1000);
 }
 #endif
-
-
